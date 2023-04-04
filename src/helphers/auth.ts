@@ -26,7 +26,7 @@ export class Auth {
         const token = crypt.encrypt(JSON.stringify(user));
         return res.json({
             data: {
-                token, user
+                token,user: user[0]
             },
             msg: 'successful', status: 200
         })

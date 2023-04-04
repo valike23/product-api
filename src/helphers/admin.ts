@@ -26,7 +26,7 @@ export class Admin {
         const token = crypt.encrypt(JSON.stringify(user));
         return res.json({
             data: {
-                token, user, role: 'admin'
+                token, user: user[0], role: 'admin'
             },
             msg: 'successful', status: 200
         })
