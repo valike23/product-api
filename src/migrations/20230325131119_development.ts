@@ -1,7 +1,7 @@
 
 
-
-exports.up = function(Knex) {
+try {
+  exports.up = function(Knex) {
     return Knex.schema.createTable('users', function(table) {
       table.bigIncrements('id').primary();
       table.string('name').notNullable();
@@ -13,5 +13,9 @@ exports.up = function(Knex) {
   exports.down = function(Knex) {
     return Knex.schema.dropTable('users');
   };
+} catch (error) {
+  console.log(error);
+}
+
   
 
