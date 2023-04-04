@@ -1,8 +1,8 @@
 
 
 
-exports.up = function(Knex) {
-    return Knex.schema.createTable('users', function(table) {
+exports.up = function(Knex: any) {
+    return Knex.schema.createTable('users', function(table: any) {
       table.bigIncrements('id').primary();
       table.string('name').notNullable();
       table.string('email').unique().notNullable();
@@ -10,7 +10,7 @@ exports.up = function(Knex) {
     });
   };
   
-  exports.down = function(Knex) {
+  exports.down = function(Knex: any) {
     return Knex.schema.dropTable('users');
   };
   
