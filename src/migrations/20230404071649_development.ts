@@ -3,7 +3,13 @@ try {
     
 exports.up = function (knex) {
     return knex.schema
-      .createTable('products', function (table) {
+    .createTableIfNotExists('users', function(table) {
+      table.bigIncrements('id').primary();
+      table.string('name').notNullable();
+      table.string('email').unique().notNullable();
+      table.string('password').notNullable();
+    })
+      .createTableIfNotExists('products', function (table) {
         table.increments('id');
         table.string('name');
         table.string('slug');
@@ -20,38 +26,38 @@ exports.up = function (knex) {
         table.string('author');
         table.integer('sold');
       })
-      .createTable('categories', function (table) {
+      .createTableIfNotExists('categories', function (table) {
         table.string('name');
         table.string('slug');
         table.integer('product_id').unsigned();
         table.foreign('product_id').references('id').inTable('products');
       })
-      .createTable('brands', function (table) {
+      .createTableIfNotExists('brands', function (table) {
         table.string('name');
         table.string('slug');
         table.integer('product_id').unsigned();
         table.foreign('product_id').references('id').inTable('products');
       })
-      .createTable('media', function (table) {
+      .createTableIfNotExists('media', function (table) {
         table.integer('width');
         table.integer('height');
         table.string('url');
         table.integer('product_id').unsigned();
         table.foreign('product_id').references('id').inTable('products');
       })
-      .createTable('variants', function (table) {
+      .createTableIfNotExists('variants', function (table) {
         table.string('color');
         table.string('color_name');
         table.float('price');
         table.integer('product_id').unsigned();
         table.foreign('product_id').references('id').inTable('products');
       })
-      .createTable('sizes', function (table) {
+      .createTableIfNotExists('sizes', function (table) {
         table.string('name');
         table.integer('variant_id').unsigned();
         table.foreign('variant_id').references('id').inTable('variants');
       })
-      .createTable('admins', function (table) {
+      .createTableIfNotExists('admins', function (table) {
         table.increments('id');
         table.string('email').unique();
         table.string('password');
@@ -61,7 +67,7 @@ exports.up = function (knex) {
   };
   
   exports.down = function (knex) {
-    return knex.schema
+    return knex.schema.dropTable('users')
       .dropTableIfExists('sizes')
       .dropTableIfExists('variants')
       .dropTableIfExists('media')
