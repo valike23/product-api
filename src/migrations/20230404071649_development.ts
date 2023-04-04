@@ -1,15 +1,15 @@
-const knex = require('knex');
+
 try {
     
-exports.up = function (knex) {
+exports.up = function (knex: any) {
     return knex.schema
-    .createTableIfNotExists('users', function(table) {
+    .createTableIfNotExists('users', function(table: any) {
       table.bigIncrements('id').primary();
       table.string('name').notNullable();
       table.string('email').unique().notNullable();
       table.string('password').notNullable();
     })
-      .createTableIfNotExists('products', function (table) {
+      .createTableIfNotExists('products', function (table: any) {
         table.increments('id');
         table.string('name');
         table.string('slug');
@@ -26,38 +26,38 @@ exports.up = function (knex) {
         table.string('author');
         table.integer('sold');
       })
-      .createTableIfNotExists('categories', function (table) {
+      .createTableIfNotExists('categories', function (table: any) {
         table.string('name');
         table.string('slug');
         table.integer('product_id').unsigned();
         table.foreign('product_id').references('id').inTable('products');
       })
-      .createTableIfNotExists('brands', function (table) {
+      .createTableIfNotExists('brands', function (table: any) {
         table.string('name');
         table.string('slug');
         table.integer('product_id').unsigned();
         table.foreign('product_id').references('id').inTable('products');
       })
-      .createTableIfNotExists('media', function (table) {
+      .createTableIfNotExists('media', function (table: any) {
         table.integer('width');
         table.integer('height');
         table.string('url');
         table.integer('product_id').unsigned();
         table.foreign('product_id').references('id').inTable('products');
       })
-      .createTableIfNotExists('variants', function (table) {
+      .createTableIfNotExists('variants', function (table: any) {
         table.string('color');
         table.string('color_name');
         table.float('price');
         table.integer('product_id').unsigned();
         table.foreign('product_id').references('id').inTable('products');
       })
-      .createTableIfNotExists('sizes', function (table) {
+      .createTableIfNotExists('sizes', function (table: any) {
         table.string('name');
         table.integer('variant_id').unsigned();
         table.foreign('variant_id').references('id').inTable('variants');
       })
-      .createTableIfNotExists('admins', function (table) {
+      .createTableIfNotExists('admins', function (table: any) {
         table.increments('id');
         table.string('email').unique();
         table.string('password');
@@ -66,7 +66,7 @@ exports.up = function (knex) {
       });
   };
   
-  exports.down = function (knex) {
+  exports.down = function (knex: any) {
     return knex.schema.dropTable('users')
       .dropTableIfExists('sizes')
       .dropTableIfExists('variants')
