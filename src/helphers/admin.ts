@@ -23,6 +23,7 @@ export class Admin {
         const user = await Knex("admin").where({ email: this.email }).select('*');
         if (!user.length) return res.json({ data: {}, msg: 'email  does not exist', status: 503 });
         console.log(user);
+        user[0].role = 'admin';
         if (this.password != user[0].password) return res.json({ data: {}, msg: ' password does not exist', status: 503 });
         
         const token = Admin.generateToken(user[0]);

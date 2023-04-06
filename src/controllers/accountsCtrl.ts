@@ -18,8 +18,8 @@ export const registerCtrl = (req: Request, res: Response) =>{
 
 export const adminLoginCtrl = (req: Request, res: Response) =>{
     const {email, password} = req.body;
-    const authHelpher = new Admin(email, password);
-    return authHelpher.login(res);
+    const adminHelper = new Admin(email, password);
+    return adminHelper.login(res);
 }
 
 
