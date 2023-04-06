@@ -7,11 +7,11 @@ import { productRouter } from './router/product';
 const app = express();
 const port = 3000;
 
+app.use(cors());
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello World!');
 });
 app.use(json());
-app.use(cors());
 app.use('/accounts', accountRouter);
 app.use('/products', productRouter);
 
