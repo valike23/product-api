@@ -21,7 +21,7 @@ export class Admin {
     async login(res: Response): Promise<any> {
       try {
         console.log(this.password, this.email);
-        const user = await Knex("admin").where({ email: this.email }).select('*');
+        const user = await Knex("admins").where({ email: this.email }).select('*');
         if (!user.length) return res.json({ data: {}, msg: 'email  does not exist', status: 503 });
         console.log(user);
         user[0].role = 'admin';
@@ -42,7 +42,7 @@ export class Admin {
     }
     async register(res: Response): Promise<any> {
         try {
-            const user = await Knex("admin").insert({
+            const user = await Knex("admins").insert({
                 email: this.email,
                 password: this.password, name: this.name
             }).select('*');
