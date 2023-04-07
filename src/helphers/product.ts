@@ -43,6 +43,15 @@ export class Product {
             return { error, status: 'failed' }
         }
     }
+    async addMedia(product_id: number, media: Imedia) {
+        try {
+            media.product_id = product_id;
+            const resp = await Knex("media").insert(media);
+            return { resp, status: 'success' }
+        } catch (error) {
+            return { error, status: 'failed' }
+        }
+    }
     async addVariation(productID: number, variant: Ivariant) {
         try {
             variant.product_id = productID;
@@ -115,4 +124,13 @@ export interface Ivariant {
 export interface Isize {
     name: string;
     variant_id: number
+}
+
+export interface Imedia{
+    width?: number;
+    height?: number;
+    url: string;
+    type?: string;
+    public_id?: string;
+    product_id?: number;
 }

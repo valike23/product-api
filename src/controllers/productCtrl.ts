@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
-import { Product } from "../helphers/product";
+import { Cloudinary } from "../helphers/cloudinary";
+import { Imedia, Isize, Product } from "../helphers/product";
 
 export const addProductCtrl =async (req: any, res: Response)=>{
     const body = req.body;
@@ -34,3 +35,26 @@ export const addSizeCtrl =async (req: any, res: Response)=>{
     if(prod.status == 'success') return res.json(prod);
     res.status(503).json(prod);
 }
+
+export const uploadCtrl =async (req: any, res: Response)=>{
+  const  {type, height, width} = req.fields;
+
+    console.log('files', req.files.media.path);
+    const cloud = new Cloudinary();
+    let image = await cloud.uploadContent(req.files.media.path);
+    let body: Imedia = {
+        url: image.secure_url,
+        type,
+        height,
+        width
+    };
+    const product = new Product({});
+    let prod = await product.addMedia(req.query.id, body);
+    if(prod.status == 'success') return res.json(prod);
+    res.status(503).json(prod);
+
+    res.json({});
+}
+
+
+
