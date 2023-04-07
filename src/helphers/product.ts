@@ -16,30 +16,68 @@ export class Product {
     constructor(product: Iproduct) {
         this.id = product.id ? product.id : 0;
         this.name = product.name ? product.name : '';
-        this.slug = product.slug? product.slug : '';
-        this.author = product.author? product.author : 0;
-        this.shortDesc = product.short_desc? product.short_desc: '';
+        this.slug = product.slug ? product.slug : '';
+        this.author = product.author ? product.author : 0;
+        this.shortDesc = product.short_desc ? product.short_desc : '';
     }
 
-    async save(){
+    async save() {
         try {
-         const resp = await   Knex("products").insert({
+            const resp = await Knex("products").insert({
                 name: this.name,
                 slug: this.slug,
                 short_desc: this.shortDesc,
                 author: this.author
             });
-            return {resp, status: 'success'}
+            return { resp, status: 'success' }
         } catch (error) {
-            return {error, status: 'failed'}
+            return { error, status: 'failed' }
         }
     }
-    async retrieveProducts(){
+    async addVariation(productID: number, variant: Ivariant) {
         try {
-          let resp = await  Knex("products");
-          return {resp, status: 'success'}
+            variant.product_id = productID;
+            const resp = await Knex("variants").insert(variant);
+            return { resp, status: 'success' }
         } catch (error) {
-            return {error, status: 'failed'}
+            return { error, status: 'failed' }
+        }
+    }
+    async retrieveProducts() {
+        try {
+            let resp = await Knex("products").select("products.id", "variants.id as variant_id", "products.slug"
+            ,"products.name", "variants.color", "products.price","products.stock","products.author","variants.color_name")
+                .leftJoin("variants", "variants.product_id", "products.id")
+                .groupBy("products.id");
+            const products = resp.map((row) => {
+                const product: any = {
+                    id: row.id,
+                    name: row.name,
+                    description: row.description,
+                    price: row.price,
+                    slug: row.slug,
+                    stock: row.stock,
+                    // Add any other columns you want from the products table here
+                    variants: [],
+                };
+
+                if (row.variant_id) {
+                    product.variants.push({
+                        id: row.variant_id,
+                        product_id: row.product_id,
+                        color: row.color,
+                        color_name: row.color_name
+                        // Add any other columns you want from the variants table here
+                    });
+                }
+
+                return product;
+            });
+
+            console.log('this resp', products);
+            return { products, status: 'success' }
+        } catch (error) {
+            return { error, status: 'failed' }
         }
     }
 }

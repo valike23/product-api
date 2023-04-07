@@ -17,3 +17,12 @@ export const getAllProductsCtrl = async (req: Request, res: Response)=>{
     if(prod.status == 'success') return res.json(prod);
     res.status(503).json(prod);
 }
+
+
+export const addVariationCtrl =async (req: any, res: Response)=>{
+    const body = req.body;
+    const product = new Product({});
+    let prod = await product.addVariation(req.query.id, body);
+    if(prod.status == 'success') return res.json(prod);
+    res.status(503).json(prod);
+}
