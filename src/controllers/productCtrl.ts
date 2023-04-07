@@ -37,7 +37,8 @@ export const addSizeCtrl =async (req: any, res: Response)=>{
 }
 
 export const uploadCtrl =async (req: any, res: Response)=>{
-  const  {type, height, width} = req.fields;
+ try {
+    const  {type, height, width} = req.fields;
 
     console.log('files', req.files.media.path);
     const cloud = new Cloudinary();
@@ -54,6 +55,10 @@ export const uploadCtrl =async (req: any, res: Response)=>{
     res.status(503).json(prod);
 
     res.json({});
+ } catch (error) {
+    console.log(error);
+    res.status(503).json(error);
+ }
 }
 
 
