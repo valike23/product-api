@@ -23,12 +23,14 @@ export class Product {
         this.featured = product.featured ? product.featured : false;
         this.stock = product.stock? product.stock : 0;
         this.top = product.top ? product.top : false;
+        this.price = product.price? product.price: 0;
     }
 
     async save() {
         try {
             const resp = await Knex("products").insert({
                 name: this.name,
+                price: this.price,
                 slug: this.slug,
                 short_desc: this.shortDesc,
                 author: this.author,
