@@ -73,8 +73,9 @@ export class Product {
     async retrieveProducts() {
         try {
             let resp = await Knex("products")
-            .select("products.id", "variants.id", "products.slug", "variants.id",
-                "products.name", "variants.color", "products.price",
+            .select("products.id", "variants.id", "products.slug", "variants.id as variant_id", 
+                "products.name", "variants.color", "products.price","products.featured",
+                "products.top", "products.price",
                 "products.stock", "products.author", "variants.color_name")
             .leftJoin("variants", "variants.product_id", "products.id")
             .groupBy("products.id", "variants.id");
