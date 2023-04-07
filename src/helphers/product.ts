@@ -34,6 +34,15 @@ export class Product {
             return { error, status: 'failed' }
         }
     }
+    async addSize(variantId: number, size: Isize) {
+        try {
+            size.variant_id = variantId;
+            const resp = await Knex("sizes").insert(size);
+            return { resp, status: 'success' }
+        } catch (error) {
+            return { error, status: 'failed' }
+        }
+    }
     async addVariation(productID: number, variant: Ivariant) {
         try {
             variant.product_id = productID;
