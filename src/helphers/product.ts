@@ -108,6 +108,9 @@ export interface Iproduct {
     short_desc?: string;
     price?: number;
     sale_price?: number;
+    featured?: boolean;
+    top?: boolean;
+    new?: boolean;
     stock?: number;
     sold?: number;
     variants?: Ivariant[]
