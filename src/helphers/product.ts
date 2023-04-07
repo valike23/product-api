@@ -76,6 +76,7 @@ export class Product {
                 "products.stock", "products.author", "variants.color_name")
             .leftJoin("variants", "variants.product_id", "products.id")
             .groupBy("products.id", "variants.id");
+            console.log('response here:',resp);
             const products = resp.map((row) => {
                 const product: any = {
                     id: row.id,
