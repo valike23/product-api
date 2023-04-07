@@ -19,6 +19,7 @@ export class Admin {
 
 
     async login(res: Response): Promise<any> {
+      try {
         console.log(this.password, this.email);
         const user = await Knex("admin").where({ email: this.email }).select('*');
         if (!user.length) return res.json({ data: {}, msg: 'email  does not exist', status: 503 });
@@ -33,6 +34,10 @@ export class Admin {
             },
             msg: 'successful', status: 200
         })
+      } catch (error) {
+        console.log(error);
+        res.status(503).json(error);
+      }
 
     }
     async register(res: Response): Promise<any> {
