@@ -9,7 +9,8 @@ export class Product {
     price?: number;
     salePrice?: number;
     stock?: number;
-
+    featured?: Boolean;
+    top?: Boolean;
     sold?: number;
     variants: Ivariant[] = [];
 
@@ -19,6 +20,9 @@ export class Product {
         this.slug = product.slug ? product.slug : '';
         this.author = product.author ? product.author : 0;
         this.shortDesc = product.short_desc ? product.short_desc : '';
+        this.featured = product.featured ? product.featured : false;
+        this.stock = product.stock? product.stock : 0;
+        this.top = product.top ? product.top : false;
     }
 
     async save() {
@@ -27,7 +31,10 @@ export class Product {
                 name: this.name,
                 slug: this.slug,
                 short_desc: this.shortDesc,
-                author: this.author
+                author: this.author,
+                featured: this.featured,
+                top: this.top,
+                stock:this.stock
             });
             return { resp, status: 'success' }
         } catch (error) {
@@ -63,10 +70,12 @@ export class Product {
     }
     async retrieveProducts() {
         try {
-            let resp = await Knex("products").select("products.id", "variants.id as variant_id", "products.slug"
-            ,"products.name", "variants.color", "products.price","products.stock","products.author","variants.color_name")
-                .leftJoin("variants", "variants.product_id", "products.id")
-                .groupBy("products.id");
+            let resp = await Knex("products")
+            .select("products.id", "variants.id", "products.slug",
+                "products.name", "variants.color", "products.price",
+                "products.stock", "products.author", "variants.color_name")
+            .leftJoin("variants", "variants.product_id", "products.id")
+            .groupBy("products.id", "variants.id");
             const products = resp.map((row) => {
                 const product: any = {
                     id: row.id,
