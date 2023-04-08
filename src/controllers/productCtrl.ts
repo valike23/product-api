@@ -50,6 +50,7 @@ export const uploadCtrl =async (req: any, res: Response)=>{
         width
     };
     const product = new Product({});
+    console.log('the body', body);
     let prod = await product.addMedia(req.query.id, body);
     if(prod.status == 'success') return res.json(prod);
     res.status(503).json(prod);

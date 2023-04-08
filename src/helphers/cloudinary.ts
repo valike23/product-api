@@ -12,9 +12,7 @@ export class Cloudinary {
     }
 
     async uploadContent(path: string){
-        const result = await cloudinary.uploader.upload(path, {
-            
-          });
+        const result = await cloudinary.uploader.upload(path);
           return result;
     }
 }
