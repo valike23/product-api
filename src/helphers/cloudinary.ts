@@ -14,6 +14,7 @@ export class Cloudinary {
             api_key: this.key
         })
         const timestamp = Math.round(Date.now() / 1000);
+        console.log('path here', path);
 const signature = cloudinary.utils.api_sign_request({ timestamp }, this.key || '');
         const result = await cloudinary.uploader.upload(path, {async: true});
           return result;
