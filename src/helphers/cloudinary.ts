@@ -12,7 +12,9 @@ export class Cloudinary {
     }
 
     async uploadContent(path: string){
-        const result = await cloudinary.uploader.upload(path);
+        const timestamp = Math.round(Date.now() / 1000);
+const signature = cloudinary.utils.api_sign_request({ timestamp }, this.key || '');
+        const result = await cloudinary.uploader.upload(path, {async: true});
           return result;
     }
 }
