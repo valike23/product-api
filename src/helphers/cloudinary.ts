@@ -4,14 +4,15 @@ export class Cloudinary {
    private key = process.env.CLOUDINARY_KEY;
    private secret= process.env.CLOUDINARY_SECRET;
     constructor(){
+        
+    }
+
+    async uploadContent(path: string){
         cloudinary.config({
             cloud_name: this.cloud_name,
             api_secret: this.secret,
             api_key: this.key
         })
-    }
-
-    async uploadContent(path: string){
         const timestamp = Math.round(Date.now() / 1000);
 const signature = cloudinary.utils.api_sign_request({ timestamp }, this.key || '');
         const result = await cloudinary.uploader.upload(path, {async: true});
