@@ -2,7 +2,7 @@ import { Router } from "express";
 import { addProductCtrl, addSizeCtrl, addVariationCtrl, getAllProductsCtrl, uploadCtrl } from "../controllers/productCtrl";
 import { Admin } from "../helphers/admin";
 import formidableMiddleware from "express-formidable";
-import { getUserOrders } from "../controllers/orderCtrl";
+import { addUserOrder, getUserOrders } from "../controllers/orderCtrl";
 import { Auth } from "../helphers/auth";
 
 export const  productRouter = Router();
@@ -14,3 +14,4 @@ productRouter.post('/addVariant',Admin.authMiddleware, addVariationCtrl);
 productRouter.post('/addSize',Admin.authMiddleware, addSizeCtrl);
 productRouter.post('/uploadMedia',[formidableMiddleware(), Admin.authMiddleware], uploadCtrl);
 productRouter.get('/user_orders',Auth.authMiddleware, getUserOrders);
+productRouter.post('/user_orders',Auth.authMiddleware, addUserOrder);
