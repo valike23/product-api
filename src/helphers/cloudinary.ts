@@ -10,6 +10,7 @@ export class Cloudinary {
     async uploadContent(path: string){
         cloudinary.config({
             cloud_name: this.cloud_name,
+            
             api_secret: this.secret,
             api_key: this.key
         })

@@ -24,7 +24,7 @@ export class Auth {
         if (user.length < 1) return res.json({ data: {}, msg: 'email  does not exist', status: 503 });
         console.log('the user is working,', user);
         if (this.password != user[0].password) return res.json({ data: {}, msg: ' password does not exist', status: 503 });
-        const token = crypt.encrypt(JSON.stringify(user));
+        const token = this.generateToken(user[0]) ;
         return res.json({
             data: {
                 token, user: user[0]
@@ -52,7 +52,7 @@ export class Auth {
         }
 
     }
-    authMiddleware(req: any, res: Response, next: NextFunction) {
+   static authMiddleware(req: any, res: Response, next: NextFunction) {
         const token = req.headers.authorization?.split(" ")[1];
 
         if (!token) {
