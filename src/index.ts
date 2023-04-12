@@ -3,6 +3,7 @@ import { accountRouter } from './router/accounts';
 import {json} from "body-parser";
 import cors from "cors";
 import { productRouter } from './router/product';
+import { settingsRouter } from './router/settings';
 
 const app = express();
 const port = 3000;
@@ -14,6 +15,7 @@ app.get('/', (req: Request, res: Response) => {
 app.use(json());
 app.use('/accounts', accountRouter);
 app.use('/products', productRouter);
+app.use('/settings', settingsRouter);
 
 
 app.listen(port, () => {

@@ -74,8 +74,8 @@ export class Product {
         try {
             let resp = await Knex("products")
             .select("products.id", "variants.id", "products.slug", "variants.id as variant_id", 
-                "products.name", "variants.color", "products.price","products.featured",
-                "products.top", "products.price",
+                "products.name", "variants.color", "products.price","products.featured","products.until",
+                "products.top", "products.price", "products.new",
                 "products.stock", "products.author", "variants.color_name")
             .leftJoin("variants", "variants.product_id", "products.id")
             .groupBy("products.id", "variants.id");
@@ -84,6 +84,9 @@ export class Product {
                 const product: any = {
                     id: row.id,
                     name: row.name,
+                    new: row.new,
+                    rated: row.rated,
+                    until: row.until,
                     description: row.description,
                     price: row.price,
                     slug: row.slug,
