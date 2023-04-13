@@ -13,6 +13,7 @@ export class Product {
     top?: Boolean;
     sold?: number;
     variants: Ivariant[] = [];
+    category_id: number | null;
 
     constructor(product: Iproduct) {
         this.id = product.id ? product.id : 0;
@@ -24,6 +25,7 @@ export class Product {
         this.stock = product.stock? product.stock : 0;
         this.top = product.top ? product.top : false;
         this.price = product.price? product.price: 0;
+        this.category_id = product.category_id ? product.category_id: null;
     }
 
     async save() {
@@ -131,7 +133,8 @@ export interface Iproduct {
     new?: boolean;
     stock?: number;
     sold?: number;
-    variants?: Ivariant[]
+    variants?: Ivariant[];
+    category_id?: number;
 }
 
 export interface Ivariant {
