@@ -38,7 +38,8 @@ export class Product {
                 author: this.author,
                 featured: this.featured,
                 top: this.top,
-                stock:this.stock
+                stock:this.stock,
+                category_id:this.category_id,
             });
             return { resp, status: 'success' }
         } catch (error) {
