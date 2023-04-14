@@ -12,6 +12,7 @@ export class Product {
     featured?: Boolean;
     top?: Boolean;
     sold?: number;
+    new?: Boolean;
     variants: Ivariant[] = [];
     category_id: number | null;
 
@@ -25,6 +26,7 @@ export class Product {
         this.stock = product.stock? product.stock : 0;
         this.top = product.top ? product.top : false;
         this.price = product.price? product.price: 0;
+        this.new = product.new? product.new: false,
         this.category_id = product.category_id ? product.category_id: null;
     }
 
@@ -40,6 +42,7 @@ export class Product {
                 top: this.top,
                 stock:this.stock,
                 category_id:this.category_id,
+                new
             });
             return { resp, status: 'success' }
         } catch (error) {
