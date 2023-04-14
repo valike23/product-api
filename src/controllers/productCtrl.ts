@@ -14,9 +14,13 @@ export const addProductCtrl =async (req: any, res: Response)=>{
 export const getAllProductsCtrl = async (req: Request, res: Response)=>{
 
     const product = new Product({});
-    let prod = await product.retrieveProducts();
-    if(prod.status == 'success') return res.json(prod);
-    res.status(503).json(prod);
+    res.json(await product.retrieveProducts());
+}
+
+export const getAllProductVariants = async (req: Request, res: Response)=>{
+
+    const product = new Product({});
+    res.json(await product.retrieveVariants(req.query.product_id as unknown as number));
 }
 
 

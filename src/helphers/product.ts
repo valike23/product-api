@@ -78,48 +78,21 @@ export class Product {
     }
     async retrieveProducts() {
         try {
-            let resp = await Knex("products")
-            .select("products.id as product_id", "variants.id", "products.slug", "variants.id as variant_id", 
-                "products.name", "variants.color", "products.price","products.featured","products.until",
-                "products.top", "products.price", "products.new",  "products.ratings",
-                "products.stock", "products.author", "variants.color_name")
-            .leftJoin("variants", "variants.product_id", "products.id")
-            .groupBy("products.id", "variants.id");
-            console.log('response here:',resp);
-            const products = resp.map((row) => {
-                const product: any = {
-                    id: row.product_id,
-                    name: row.name,
-                    new: row.new,
-                    rated: row.rated,
-                    until: row.until,
-                    featured: row.featured,
-                    ratings: row.ratings,
-                    description: row.description,
-                    price: row.price,
-                    slug: row.slug,
-                    stock: row.stock,
-                    // Add any other columns you want from the products table here
-                    variants: [],
-                };
-
-                if (row.variant_id) {
-                    product.variants.push({
-                        id: row.variant_id,
-                        product_id: row.product_id,
-                        color: row.color,
-                        color_name: row.color_name
-                        // Add any other columns you want from the variants table here
-                    });
-                }
-
-                return product;
-            });
-
-            console.log('this resp', products);
-            return { products, status: 'success' }
+            const products = await Knex('products');
+            return {status:200, msg: 'success',  data: products} 
         } catch (error) {
-            return { error, status: 'failed' }
+            console.log(error);
+            return { status: 503, msg: 'something went wrong', error }
+        }
+    }
+
+    async retrieveVariants(product_id: number){
+        try {
+            const variants = await Knex('variants').where({product_id});
+            return {status:200, msg: 'success',  data: variants} 
+        } catch (error) {
+            console.log(error);
+            return { status: 503, msg: 'something went wrong', error }
         }
     }
 }
