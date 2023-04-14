@@ -42,7 +42,7 @@ export class Product {
                 top: this.top,
                 stock:this.stock,
                 category_id:this.category_id,
-                new
+                new: this.new
             });
             return { resp, status: 'success' }
         } catch (error) {
@@ -79,7 +79,7 @@ export class Product {
     async retrieveProducts() {
         try {
             let resp = await Knex("products")
-            .select("products.id", "variants.id", "products.slug", "variants.id as variant_id", 
+            .select("products.id as product_id", "variants.id", "products.slug", "variants.id as variant_id", 
                 "products.name", "variants.color", "products.price","products.featured","products.until",
                 "products.top", "products.price", "products.new",  "products.ratings",
                 "products.stock", "products.author", "variants.color_name")
@@ -88,7 +88,7 @@ export class Product {
             console.log('response here:',resp);
             const products = resp.map((row) => {
                 const product: any = {
-                    id: row.id,
+                    id: row.product_id,
                     name: row.name,
                     new: row.new,
                     rated: row.rated,
