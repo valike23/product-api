@@ -87,15 +87,15 @@ export class Product {
                 .select('variants.product_id', 'variants.color as color', 'variants.price as variation_price',
                     'variants.old_price as variation_old_price', 'variants.new_price as variation_new_price')
                 .whereIn('variants.product_id', products.map((product) => product.id));
-                const categories = await Knex('categories')
+            const categories = await Knex('categories')
                 .select('categories.product_id', 'categories.name as category_name', 'categories.slug as category_slug')
                 .whereIn('categories.product_id', products.map((product) => product.id));
 
-                
+
 
             const productsWithCategories = products.map((product) => {
                 const productCategories = categories.filter((category) => category.product_id === product.id);
-
+                console.log('the product categories', productCategories);
                 return productCategories
             });
             const productsWithVariations = products.map((product) => {
