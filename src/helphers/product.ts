@@ -79,8 +79,8 @@ export class Product {
     async retrieveProducts() {
         try {
             const products = await Knex('products')
-    .select('products.id', 'products.name', 'products.price', 'category.name as category', 'media.url as image')
-    .leftJoin('category', 'products.category_id', 'category.id')
+    .select('products.id', 'products.name', 'products.price','products.slug', 'products.short_desc', 'category.name as category', 'media.url as image')
+    .leftJoin('categories', 'products.category_id', 'category.id')
     .leftJoin('media', 'products.media_id', 'media.id');
 
   const variations = await Knex('variations')
