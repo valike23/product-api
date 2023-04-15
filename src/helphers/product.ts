@@ -85,7 +85,8 @@ export class Product {
     .leftJoin('categories', 'products.category_id', 'categories.id')
 
   const variations = await Knex('variants')
-    .select('variants.product_id', 'variants.name as variation_name',  'variants.price as variation_price')
+    .select('variants.product_id', 'variants.color as color',  'variants.price as variation_price',
+    'variants.old_price as variation_old_price','variants.new_price as variation_new_price')
     .whereIn('variants.product_id', products.map((product) => product.id));
 
   const productsWithVariations = products.map((product) => {
