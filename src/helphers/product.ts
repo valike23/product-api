@@ -79,40 +79,65 @@ export class Product {
     async retrieveProducts() {
         try {
             const products = await Knex('products')
-                .select('products.id', 'products.name', 'products.price', 'products.slug', 'products.featured',
-                    'products.short_desc', 'products.new', 'products.until', 'products.top', 'products.ratings', 'products.stock',
-                    'products.review');
+                .select(
+                    'products.id',
+                    'products.name',
+                    'products.price',
+                    'products.slug',
+                    'products.featured',
+                    'products.short_desc',
+                    'products.new',
+                    'products.until',
+                    'products.top',
+                    'products.ratings',
+                    'products.stock',
+                    'products.review'
+                );
 
             const variations = await Knex('variants')
-                .select('variants.product_id', 'variants.color as color', 'variants.price as variation_price',
-                    'variants.old_price as variation_old_price', 'variants.new_price as variation_new_price')
+                .select(
+                    'variants.product_id',
+                    'variants.color as color',
+                    'variants.price as variation_price',
+                    'variants.old_price as variation_old_price',
+                    'variants.new_price as variation_new_price'
+                )
                 .whereIn('variants.product_id', products.map((product) => product.id));
+
             const categories = await Knex('categories')
-                .select('categories.product_id', 'categories.name as category_name', 'categories.slug as category_slug')
+                .select(
+                    'categories.product_id',
+                    'categories.name as category_name',
+                    'categories.slug as category_slug'
+                )
                 .whereIn('categories.product_id', products.map((product) => product.id));
 
-
-
             const productsWithCategories = products.map((product) => {
-                const productCategories = categories.filter((category) => category.product_id === product.id);
-                console.log('the product categories', productCategories);
-                return productCategories
-            });
-            const productsWithVariations = products.map((product) => {
-                const productVariations = variations.filter((variation) => variation.product_id === product.id);
+                const productCategories = categories
+                    .filter((category) => category.product_id === product.id)
+                    .map((category) => category.category_name);
 
                 return {
                     ...product,
-                    variants: productVariations,
-                    categories: productsWithCategories
+                    categories: productCategories
                 };
             });
 
-            ;
-            return { status: 200, msg: 'success', data: productsWithVariations }
+            const productsWithVariations = productsWithCategories.map((product) => {
+                const productVariations = variations.filter(
+                    (variation) => variation.product_id === product.id
+                );
+
+                return {
+                    ...product,
+                    variants: productVariations
+                };
+            });
+
+            return { status: 200, msg: 'success', data: productsWithVariations };
         } catch (error) {
-            console.log(error);
-            return { status: 503, msg: 'something went wrong', error }
+            console.error(error);
+            return { status: 500, msg: 'server error' };
         }
     }
 
