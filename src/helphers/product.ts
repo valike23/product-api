@@ -80,7 +80,8 @@ export class Product {
         try {
             const products = await Knex('products')
     .select('products.id', 'products.name', 'products.price','products.slug','products.featured',
-     'products.short_desc', 'products.new', 'products.until', 'products.top', 'products.ratings','products.stock','products.review', 'category.name as category', 'media.url as image')
+     'products.short_desc', 'products.new', 'products.until', 'products.top', 'products.ratings','products.stock',
+     'products.review', 'categories.name as category', 'media.url as image')
     .leftJoin('categories', 'products.category_id', 'category.id')
     .leftJoin('media', 'products.media_id', 'media.id');
 
