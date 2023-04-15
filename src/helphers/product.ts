@@ -82,7 +82,7 @@ export class Product {
     .select('products.id', 'products.name', 'products.price','products.slug','products.featured',
      'products.short_desc', 'products.new', 'products.until', 'products.top', 'products.ratings','products.stock',
      'products.review', 'categories.name as category')
-    .leftJoin('categories', 'products.category_id', 'category.id')
+    .leftJoin('categories', 'products.category_id', 'categories.id')
 
   const variations = await Knex('variants')
     .select('variants.product_id', 'variants.name as variation_name',  'variants.price as variation_price')
