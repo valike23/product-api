@@ -78,8 +78,26 @@ export class Product {
     }
     async retrieveProducts() {
         try {
-            const products = await Knex('products');
-            return {status:200, msg: 'success',  data: products} 
+            const products = await Knex('products')
+    .select('products.id', 'products.name', 'products.price', 'category.name as category', 'media.url as image')
+    .leftJoin('category', 'products.category_id', 'category.id')
+    .leftJoin('media', 'products.media_id', 'media.id');
+
+  const variations = await Knex('variations')
+    .select('variations.product_id', 'variations.name as variation_name', 'variations.price as variation_price')
+    .whereIn('variations.product_id', products.map((product) => product.id));
+
+  const productsWithVariations = products.map((product) => {
+    const productVariations = variations.filter((variation) => variation.product_id === product.id);
+
+    return {
+      ...product,
+      variations: productVariations
+    };
+  });
+
+   ;
+            return {status:200, msg: 'success',  data: productsWithVariations} 
         } catch (error) {
             console.log(error);
             return { status: 503, msg: 'something went wrong', error }
