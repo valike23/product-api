@@ -79,20 +79,21 @@ export class Product {
     async retrieveProducts() {
         try {
             const products = await Knex('products')
-    .select('products.id', 'products.name', 'products.price','products.slug', 'products.short_desc', 'category.name as category', 'media.url as image')
+    .select('products.id', 'products.name', 'products.price','products.slug','products.featured',
+     'products.short_desc', 'products.new', 'products.until', 'products.top', 'products.ratings','products.stock','products.review', 'category.name as category', 'media.url as image')
     .leftJoin('categories', 'products.category_id', 'category.id')
     .leftJoin('media', 'products.media_id', 'media.id');
 
-  const variations = await Knex('variations')
-    .select('variations.product_id', 'variations.name as variation_name', 'variations.price as variation_price')
-    .whereIn('variations.product_id', products.map((product) => product.id));
+  const variations = await Knex('variants')
+    .select('variants.product_id', 'variants.name as variation_name',  'variants.price as variation_price')
+    .whereIn('variants.product_id', products.map((product) => product.id));
 
   const productsWithVariations = products.map((product) => {
     const productVariations = variations.filter((variation) => variation.product_id === product.id);
 
     return {
       ...product,
-      variations: productVariations
+      variants: productVariations
     };
   });
 
