@@ -23,11 +23,11 @@ export class Product {
         this.author = product.author ? product.author : 0;
         this.shortDesc = product.short_desc ? product.short_desc : '';
         this.featured = product.featured ? product.featured : false;
-        this.stock = product.stock? product.stock : 0;
+        this.stock = product.stock ? product.stock : 0;
         this.top = product.top ? product.top : false;
-        this.price = product.price? product.price: 0;
-        this.new = product.new? product.new: false,
-        this.category_id = product.category_id ? product.category_id: null;
+        this.price = product.price ? product.price : 0;
+        this.new = product.new ? product.new : false,
+            this.category_id = product.category_id ? product.category_id : null;
     }
 
     async save() {
@@ -40,8 +40,8 @@ export class Product {
                 author: this.author,
                 featured: this.featured,
                 top: this.top,
-                stock:this.stock,
-                category_id:this.category_id,
+                stock: this.stock,
+                category_id: this.category_id,
                 new: this.new
             });
             return { resp, status: 'success' }
@@ -79,37 +79,47 @@ export class Product {
     async retrieveProducts() {
         try {
             const products = await Knex('products')
-    .select('products.id', 'products.name', 'products.price','products.slug','products.featured',
-     'products.short_desc', 'products.new', 'products.until', 'products.top', 'products.ratings','products.stock',
-     'products.review', 'categories.name as category')
-    .leftJoin('categories', 'products.category_id', 'categories.id')
+                .select('products.id', 'products.name', 'products.price', 'products.slug', 'products.featured',
+                    'products.short_desc', 'products.new', 'products.until', 'products.top', 'products.ratings', 'products.stock',
+                    'products.review');
 
-  const variations = await Knex('variants')
-    .select('variants.product_id', 'variants.color as color',  'variants.price as variation_price',
-    'variants.old_price as variation_old_price','variants.new_price as variation_new_price')
-    .whereIn('variants.product_id', products.map((product) => product.id));
+            const variations = await Knex('variants')
+                .select('variants.product_id', 'variants.color as color', 'variants.price as variation_price',
+                    'variants.old_price as variation_old_price', 'variants.new_price as variation_new_price')
+                .whereIn('variants.product_id', products.map((product) => product.id));
+                const categories = await Knex('categories')
+                .select('categories.product_id', 'categories.name as category_name', 'categories.slug as category_slug')
+                .whereIn('categories.product_id', products.map((product) => product.id));
 
-  const productsWithVariations = products.map((product) => {
-    const productVariations = variations.filter((variation) => variation.product_id === product.id);
+                
 
-    return {
-      ...product,
-      variants: productVariations
-    };
-  });
+            const productsWithCategories = products.map((product) => {
+                const productCategories = categories.filter((category) => category.product_id === product.id);
 
-   ;
-            return {status:200, msg: 'success',  data: productsWithVariations} 
+                return productCategories
+            });
+            const productsWithVariations = products.map((product) => {
+                const productVariations = variations.filter((variation) => variation.product_id === product.id);
+
+                return {
+                    ...product,
+                    variants: productVariations,
+                    categories: productsWithCategories
+                };
+            });
+
+            ;
+            return { status: 200, msg: 'success', data: productsWithVariations }
         } catch (error) {
             console.log(error);
             return { status: 503, msg: 'something went wrong', error }
         }
     }
 
-    async retrieveVariants(product_id: number){
+    async retrieveVariants(product_id: number) {
         try {
-            const variants = await Knex('variants').where({product_id});
-            return {status:200, msg: 'success',  data: variants} 
+            const variants = await Knex('variants').where({ product_id });
+            return { status: 200, msg: 'success', data: variants }
         } catch (error) {
             console.log(error);
             return { status: 503, msg: 'something went wrong', error }
@@ -147,7 +157,7 @@ export interface Isize {
     variant_id: number
 }
 
-export interface Imedia{
+export interface Imedia {
     width?: number;
     height?: number;
     url: string;
