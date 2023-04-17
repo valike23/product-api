@@ -76,9 +76,9 @@ export class Product {
             return { error, status: 'failed' }
         }
     }
-    async retrieveProducts() {
+    async retrieveProducts(page = 1, limit = 10, searchQuery = '') {
         try {
-            const products = await Knex('products')
+            const query = Knex('products')
                 .select(
                     'products.id',
                     'products.name',
@@ -92,7 +92,16 @@ export class Product {
                     'products.ratings',
                     'products.stock',
                     'products.review'
-                );
+                )
+                .orderBy('id', 'desc')
+                .limit(limit)
+                .offset((page - 1) * limit);
+
+            if (searchQuery) {
+                query.where('name', 'like', `%${searchQuery}%`);
+            }
+
+            const products = await query;
 
             const variations = await Knex('variants')
                 .select(
@@ -134,12 +143,30 @@ export class Product {
                 };
             });
 
-            return { status: 200, msg: 'success', data: productsWithVariations };
+            const totalProducts: any = await Knex('products')
+                .count('id')
+                .where('name', 'like', `%${searchQuery}%`)
+                .first();
+
+            const totalPages = Math.ceil(totalProducts.count / limit);
+
+            return {
+                status: 200,
+                msg: 'success',
+                data: {
+                    products: productsWithVariations,
+                    pagination: {
+                        currentPage: page,
+                        totalPages: totalPages
+                    }
+                }
+            };
         } catch (error) {
             console.error(error);
             return { status: 500, msg: 'server error' };
         }
     }
+
 
     async retrieveVariants(product_id: number) {
         try {
