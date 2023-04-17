@@ -5,9 +5,9 @@ export class Category {
     constructor(){
 
     }
-    async save(category: Icategory){
+    async save(categories: Icategory[]){
         try {
-            const resp = await Knex('categories').insert(category);
+            const resp = await Knex('categories').insert(categories);
             return {status:200, msg: 'success',  data: resp}
         } catch (error) {
             console.log(error);

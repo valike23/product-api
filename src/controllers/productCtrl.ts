@@ -1,13 +1,16 @@
 import { Request, Response } from "express";
 import { Cloudinary } from "../helphers/cloudinary";
 import { Imedia, Isize, Product } from "../helphers/product";
+import { Category } from "../helphers/category";
 
 export const addProductCtrl = async (req: any, res: Response) => {
     const body = req.body;
     body.author = req["user"].id;
     const product = new Product(body);
     let prod = await product.save();
-    if (prod.status == 'success') return res.json(prod);
+    let category = new Category();
+    const cate = await category.save(body.categories);
+    if (prod.status == 'success') return res.json({prod, cate});
     res.status(503).json(prod);
 }
 
