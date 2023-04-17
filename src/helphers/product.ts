@@ -41,7 +41,6 @@ export class Product {
                 featured: this.featured,
                 top: this.top,
                 stock: this.stock,
-                category_id: this.category_id,
                 new: this.new
             });
             return { resp, status: 'success' }
