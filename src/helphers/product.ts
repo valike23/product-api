@@ -93,13 +93,13 @@ export class Product {
                 .orderBy('id', 'desc')
                 .limit(limit)
                 .offset((page - 1) * limit);
-
+    
             if (searchQuery) {
                 query.where('name', 'like', `%${searchQuery}%`);
             }
-
+    
             const products = await query;
-
+    
             const variations = await Knex('variants')
                 .select(
                     'variants.product_id',
@@ -109,44 +109,51 @@ export class Product {
                     'variants.new_price as variation_new_price'
                 )
                 .whereIn('variants.product_id', products.map((product) => product.id));
-
+    
             const categories = await Knex('categories')
                 .select(
                     'categories.product_id',
                     'categories.name as category_name',
                     'categories.slug as category_slug'
                 )
-                .whereIn('categories.product_id', products.map((product) => product.id));
-
+                .whereIn('categories.product_id', products.map((product) => product.id))
+                .groupBy('categories.product_id');
+    
             const productsWithCategories = products.map((product) => {
                 const productCategories = categories
                     .filter((category) => category.product_id === product.id)
-                    .map((category) => category.category_name);
-
+                    .reduce((acc, category) => {
+                        acc.push({
+                            name: category.category_name,
+                            slug: category.category_slug
+                        });
+                        return acc;
+                    }, []);
+    
                 return {
                     ...product,
                     categories: productCategories
                 };
             });
-
+    
             const productsWithVariations = productsWithCategories.map((product) => {
                 const productVariations = variations.filter(
                     (variation) => variation.product_id === product.id
                 );
-
+    
                 return {
                     ...product,
                     variants: productVariations
                 };
             });
-
+    
             const totalProducts: any = await Knex('products')
                 .count('id')
                 .where('name', 'like', `%${searchQuery}%`)
                 .first();
-
+    
             const totalPages = Math.ceil(totalProducts.count / limit);
-
+    
             return {
                 status: 200,
                 msg: 'success',
@@ -163,6 +170,7 @@ export class Product {
             return { status: 500, msg: 'server error' };
         }
     }
+    
 
 
     async retrieveVariants(product_id: number) {
