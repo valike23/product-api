@@ -14,6 +14,8 @@ export class Product {
     sold?: number;
     new?: Boolean;
     variants: Ivariant[] = [];
+    ratings?: number;
+    until?: string;
 
     constructor(product: Iproduct) {
         this.id = product.id ? product.id : 0;
@@ -25,7 +27,9 @@ export class Product {
         this.stock = product.stock ? product.stock : 0;
         this.top = product.top ? product.top : false;
         this.price = product.price ? product.price : 0;
-        this.new = product.new ? product.new : false
+        this.new = product.new ? product.new : false;
+        this.ratings = product.ratings ? product.ratings: 0.0;
+        this.until = product.until ? product.until: ''
     }
 
     async save() {
@@ -39,7 +43,9 @@ export class Product {
                 featured: this.featured,
                 top: this.top,
                 stock: this.stock,
-                new: this.new
+                new: this.new,
+                ratings: this.ratings,
+                until: this.until
             });
             return { resp, status: 'success' }
         } catch (error) {
@@ -190,6 +196,8 @@ export interface Iproduct {
     sold?: number;
     variants?: Ivariant[];
     category_id?: number;
+    ratings?: number;
+    until?: string;
 }
 
 export interface Ivariant {
