@@ -34,7 +34,7 @@ export class Auth {
             .count('id')
             .where('name', 'like', `%${searchQuery}%`)
             .first();
-
+        console.log('the total users is:', totalUsers);
         const totalPages = Math.ceil(totalUsers.count / limit);
 
         return {
