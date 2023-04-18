@@ -142,8 +142,7 @@ export class Product {
 
             const totalProducts: any = await Knex('products')
                 .count('id')
-                .where('name', 'like', `%${searchQuery}%`)
-                .first();
+                .where('name', 'like', `%${searchQuery}%`);
 
             const totalPages = Math.ceil(totalProducts.count / limit);
 
