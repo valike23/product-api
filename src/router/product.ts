@@ -3,7 +3,7 @@ import { addProductCtrl, addSizeCtrl, addVariationCtrl, getAllProductsCtrl, getA
 import { Admin } from "../helphers/admin";
 import formidableMiddleware from "express-formidable";
 import { addCategoryCtrl, addUserOrder, getCategoriesCtrl, getCategoryProductsCtrl, getUserOrders } from "../controllers/orderCtrl";
-import { Auth } from "../helphers/auth";
+import { Auth } from "../helphers/users";
 
 export const  productRouter = Router();
 
