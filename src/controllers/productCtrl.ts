@@ -7,8 +7,12 @@ export const addProductCtrl = async (req: any, res: Response) => {
     const body = req.body;
     body.author = req["user"].id;
     const product = new Product(body);
-    let prod = await product.save();
+    let prod : any= await product.save();
     let category = new Category();
+    let id = prod.resp[0];
+    body.categories.forEach((_e: any,_i: any)=>{
+        body.categories[_i].product_id = id;
+    });
     const cate = await category.save(body.categories);
     if (prod.status == 'success') return res.json({prod, cate});
     res.status(503).json(prod);
