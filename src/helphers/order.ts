@@ -31,7 +31,7 @@ export class Order {
             'orders.orderID as orderID',
             'orders.status as status',
             'orders.shipping as shipping',
-            'orders.userId as userId',
+            'orders.user_id as userId',
             'users.id as user.id',
             'users.name as user.name',
             'users.email as user.email',
