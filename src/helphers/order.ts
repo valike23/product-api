@@ -41,7 +41,7 @@ export class Order {
             'products.slug as products.slug',
             'products.price as products.price'
         )
-        .join('users', 'orders.userId', '=', 'users.id')
+        .join('users', 'orders.user_id', '=', 'users.id')
         .join('order_products', 'orders.id', '=', 'order_products.order_id')
         .join('products', 'order_products.product_id', '=', 'products.id')
         .where('orders.status', status);
