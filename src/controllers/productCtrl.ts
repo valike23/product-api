@@ -86,5 +86,11 @@ export const uploadCtrl = async (req: any, res: Response) => {
     }
 }
 
+export const getProductMediaCtrl = async (req: Request, res: Response) =>{
+    const prod = new Product({});
+   let data = await prod.getMedia(req.query.id as unknown as number);
+   res.status(data.status).json(data);
+}
+
 
 

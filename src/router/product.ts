@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { addProductCtrl, addSizeCtrl, addVariationCtrl, getAllProductsCtrl, getAllProductVariants, uploadCtrl } from "../controllers/productCtrl";
+import { addProductCtrl, addSizeCtrl, addVariationCtrl, getAllProductsCtrl, getAllProductVariants, getProductMediaCtrl, uploadCtrl } from "../controllers/productCtrl";
 import { Admin } from "../helphers/admin";
 import formidableMiddleware from "express-formidable";
 import { addCategoryCtrl, addUserOrder, getCategoriesCtrl, getCategoryProductsCtrl, getUserOrders, retrieveOrdersByStatusCtrl } from "../controllers/orderCtrl";
@@ -13,6 +13,7 @@ productRouter.post('/addVariant',Admin.authMiddleware, addVariationCtrl);
 productRouter.get('/variants', getAllProductVariants);
 productRouter.post('/addSize',Admin.authMiddleware, addSizeCtrl);
 productRouter.post('/uploadMedia',[formidableMiddleware(), Admin.authMiddleware], uploadCtrl);
+productRouter.get('/product_media',getProductMediaCtrl);
 
 
 productRouter.get('/user_orders',Auth.authMiddleware, getUserOrders);

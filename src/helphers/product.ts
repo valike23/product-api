@@ -70,6 +70,15 @@ export class Product {
             return { error, status: 'failed' }
         }
     }
+    async getMedia(product_id: number,){
+        try {
+            const media = await Knex('media').where({product_id});
+            return { status: 200, msg: 'success', data: media }
+        } catch (error) {
+            console.log(error);
+            return { status: 503, msg: 'something went wrong', error }
+        }
+    }
     async addVariation(productID: number, variant: Ivariant) {
         try {
             variant.product_id = productID;
