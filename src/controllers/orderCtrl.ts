@@ -23,6 +23,15 @@ export async function addUserOrder(req: any, res: Response) {
         res.status(data?.status as number).json(data);
     }
 }
+export async function retrieveOrdersByStatusCtrl(req: Request, res: Response){
+    try {
+      let data = await  order.getOrdersByStatus(req.query.status as string);
+      res.json(data);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json(error);
+    }
+}
 
 export async function getCategoriesCtrl(req: any, res: Response) {
 
