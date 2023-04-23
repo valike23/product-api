@@ -92,5 +92,11 @@ export const getProductMediaCtrl = async (req: Request, res: Response) =>{
    res.status(data.status).json(data);
 }
 
+export const removeProduct = async (req: Request, res: Response)=>{
+    const prod = new Product({});
+    let data = await prod.deleteProduct(req.query.id as unknown as number);
+    res.status(data.status).json(data);
+}
+
 
 

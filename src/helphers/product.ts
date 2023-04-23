@@ -28,8 +28,8 @@ export class Product {
         this.top = product.top ? product.top : false;
         this.price = product.price ? product.price : 0;
         this.new = product.new ? product.new : false;
-        this.ratings = product.ratings ? product.ratings: 0.0;
-        this.until = product.until ? product.until: ''
+        this.ratings = product.ratings ? product.ratings : 0.0;
+        this.until = product.until ? product.until : ''
     }
 
     async save() {
@@ -70,9 +70,9 @@ export class Product {
             return { error, status: 'failed' }
         }
     }
-    async getMedia(product_id: number,){
+    async getMedia(product_id: number,) {
         try {
-            const media = await Knex('media').where({product_id});
+            const media = await Knex('media').where({ product_id });
             return { status: 200, msg: 'success', data: media }
         } catch (error) {
             console.log(error);
@@ -183,6 +183,17 @@ export class Product {
         try {
             const variants = await Knex('variants').where({ product_id });
             return { status: 200, msg: 'success', data: variants }
+        } catch (error) {
+            console.log(error);
+            return { status: 503, msg: 'something went wrong', error }
+        }
+    }
+    async deleteProduct(product_id: number) {
+        try {
+         let data = await   Knex('products')
+                .where('id', product_id) // Replace 'productId' with the ID of the product you want to delete
+                .delete();
+                return { status: 200, msg: 'success', data }
         } catch (error) {
             console.log(error);
             return { status: 503, msg: 'something went wrong', error }
