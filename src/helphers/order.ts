@@ -120,6 +120,20 @@ export class Order {
         return { status: 503, msg: 'something went wrong', error }
     }
 }
+
+async updateOrderStatus(orderID: number, newStatus: string){
+    try {
+        
+      const data = await  Knex('orders')
+        .where('id', orderID) 
+        .update({ status: newStatus }) ;
+        return { status: 200, msg: 'success', data }
+    } catch (error) {
+        console.log(error);
+        return { status: 503, msg: 'something went wrong', error }
+    }
+  
+}
    private async addOrderProducts(products: number[]){
     try {
 

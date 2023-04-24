@@ -52,6 +52,12 @@ export async function addCategoryCtrl(req: Request, res: Response) {
     }
 }
 
+export async function updateOrderCtrl (req: Request, res: Response) {
+    
+    let data = await order.updateOrderStatus(req.query.id as unknown as number, req.query.status as string);
+    res.status(data.status).json(data);
+}
+
 export async function getCategoryProductsCtrl(req: any, res: Response) {
 
     res.json({
