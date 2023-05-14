@@ -90,114 +90,114 @@ export class Product {
     }
     async retrieveProducts(page = 1, limit = 10, searchQuery = '') {
         try {
-          const query = Knex('products')
-            .select(
-              'products.id',
-              'products.name',
-              'products.price',
-              'products.slug',
-              'products.featured',
-              'products.short_desc',
-              'products.new',
-              'products.until',
-              'products.top',
-              'products.ratings',
-              'products.stock',
-              'products.review'
-            )
-            .orderBy('id', 'desc')
-            .limit(limit)
-            .offset((page - 1) * limit);
-      
-          if (searchQuery) {
-            query.where('name', 'like', `%${searchQuery}%`);
-          }
-      
-          const products = await query;
-      
-          const variations = await Knex('variants')
-            .select(
-              'variants.product_id',
-              'variants.color as color',
-              'variants.price as variation_price',
-              'variants.old_price as variation_old_price',
-              'variants.new_price as variation_new_price'
-            )
-            .whereIn('variants.product_id', products.map((product) => product.id));
-      
-          const categories = await Knex('categories')
-            .select(
-              'categories.product_id',
-              'categories.name as category_name',
-              'categories.slug as category_slug'
-            )
-            .whereIn('categories.product_id', products.map((product) => product.id));
-      
-          const media = await Knex('media')
-            .select(
-              'media.width as width',
-              'media.height as height',
-              'media.url as url',
-              'media.product_id as product_id',
-              'media.type as type'
-            )
-            .whereIn('media.product_id', products.map((product) => product.id));
-      
-          const productsWithCategories = products.map((product) => {
-            const productCategories = categories
-              .filter((category) => category.product_id === product.id)
-              .map((category) => category.category_name);
-      
-            const productMedia = media
-              .filter((mediaItem) => mediaItem.product_id === product.id)
-              .map((mediaItem) => ({
-                width: mediaItem.width,
-                height: mediaItem.height,
-                url: mediaItem.url,
-                type: mediaItem.type
-              }));
-      
-            return {
-              ...product,
-              categories: productCategories,
-              media: productMedia
-            };
-          });
-      
-          const productsWithVariations = productsWithCategories.map((product) => {
-            const productVariations = variations.filter(
-              (variation) => variation.product_id === product.id
-            );
-      
-            return {
-              ...product,
-              variants: productVariations
-            };
-          });
-      
-          const totalProducts: any = await Knex('products')
-            .count('id')
-            .where('name', 'like', `%${searchQuery}%`);
-      
-          const totalPages = Math.ceil(totalProducts.count / limit);
-      
-          return {
-            status: 200,
-            msg: 'success',
-            data: {
-              products: productsWithVariations,
-              pagination: {
-                currentPage: page,
-                totalPages: totalPages
-              }
+            const query = Knex('products')
+                .select(
+                    'products.id',
+                    'products.name',
+                    'products.price',
+                    'products.slug',
+                    'products.featured',
+                    'products.short_desc',
+                    'products.new',
+                    'products.until',
+                    'products.top',
+                    'products.ratings',
+                    'products.stock',
+                    'products.review'
+                )
+                .orderBy('id', 'desc')
+                .limit(limit)
+                .offset((page - 1) * limit);
+
+            if (searchQuery) {
+                query.where('name', 'like', `%${searchQuery}%`);
             }
-          };
+
+            const products = await query;
+
+            const variations = await Knex('variants')
+                .select(
+                    'variants.product_id',
+                    'variants.color as color',
+                    'variants.price as variation_price',
+                    'variants.old_price as variation_old_price',
+                    'variants.new_price as variation_new_price'
+                )
+                .whereIn('variants.product_id', products.map((product) => product.id));
+
+            const categories = await Knex('categories')
+                .select(
+                    'categories.product_id',
+                    'categories.name as category_name',
+                    'categories.slug as category_slug'
+                )
+                .whereIn('categories.product_id', products.map((product) => product.id));
+
+            const media = await Knex('media')
+                .select(
+                    'media.width as width',
+                    'media.height as height',
+                    'media.url as url',
+                    'media.product_id as product_id',
+                    'media.type as type'
+                )
+                .whereIn('media.product_id', products.map((product) => product.id));
+
+            const productsWithCategories = products.map((product) => {
+                const productCategories = categories
+                    .filter((category) => category.product_id === product.id)
+                    .map((category) => category.category_name);
+
+                const productMedia = media
+                    .filter((mediaItem) => mediaItem.product_id === product.id)
+                    .map((mediaItem) => ({
+                        width: mediaItem.width,
+                        height: mediaItem.height,
+                        url: mediaItem.url,
+                        type: mediaItem.type
+                    }));
+
+                return {
+                    ...product,
+                    categories: productCategories,
+                    media: productMedia
+                };
+            });
+
+            const productsWithVariations = productsWithCategories.map((product) => {
+                const productVariations = variations.filter(
+                    (variation) => variation.product_id === product.id
+                );
+
+                return {
+                    ...product,
+                    variants: productVariations
+                };
+            });
+
+            const totalProducts: any = await Knex('products')
+                .count('id')
+                .where('name', 'like', `%${searchQuery}%`);
+
+            const totalPages = Math.ceil(totalProducts.count / limit);
+
+            return {
+                status: 200,
+                msg: 'success',
+                data: {
+                    products: productsWithVariations,
+                    pagination: {
+                        currentPage: page,
+                        totalPages: totalPages
+                    }
+                }
+            };
         } catch (error) {
-          console.error(error);
-          return { status: 500, msg: 'server error' };
+            console.error(error);
+            return { status: 500, msg: 'server error' };
         }
-      }
-      
+    }
+
 
 
     async retrieveVariants(product_id: number) {
@@ -211,10 +211,10 @@ export class Product {
     }
     async deleteProduct(product_id: number) {
         try {
-         let data = await   Knex('products')
+            let data = await Knex('products')
                 .where('id', product_id) // Replace 'productId' with the ID of the product you want to delete
                 .delete();
-                return { status: 200, msg: 'success', data }
+            return { status: 200, msg: 'success', data }
         } catch (error) {
             console.log(error);
             return { status: 503, msg: 'something went wrong', error }

@@ -20,3 +20,7 @@ else{
 export async function getConfigCtrl(req:Request, res: Response){
     res.json(await config.returnConfig(req.query.property as string));
 }
+export async function editConfigCtrl(req:Request, res: Response){
+    console.log('property here text: ',req.body);
+    res.json(await config.editConfig(req.body.property, req.body.value));
+}

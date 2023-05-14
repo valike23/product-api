@@ -22,6 +22,17 @@ export class Config {
         }
      
     }
+    async editConfig(property: string, value: string) {
+        try {
+          const resp = await Knex("configs")
+            .where({ property})
+            .update({ value });
+          return { status: 200, msg: "success", data: resp };
+        } catch (error) {
+          console.log(error);
+          return { status: 503, msg: "something went wrong", error };
+        }
+      }
 }
 
 export interface Iconfig {
