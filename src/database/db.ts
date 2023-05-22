@@ -1,6 +1,6 @@
 import knex from "knex";
 
-let {MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD}  = process.env;
+let {MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DB}  = process.env;
 console.log(MYSQL_HOST, MYSQL_USER);
 
 export const  Knex = knex({
@@ -9,6 +9,6 @@ export const  Knex = knex({
         host: MYSQL_HOST || 'localhost',
         user: MYSQL_USER || 'root' ,
         password: MYSQL_PASSWORD || '',
-        database: 'demosysdb'
+        database: MYSQL_DB || 'demosysdb'
     }
 });
